@@ -1,0 +1,30 @@
+# ==============================================================================
+# Cryptographic Identity & Public Key Fingerprints for nada.mu
+# Owner: Danya (DanyaNADAMU) <danya@nada.mu> / <git@nada.mu>
+# ==============================================================================
+
+[OpenSSH Git Commit Signing Key]
+File:            ssh/danya-git.pub
+Type:            ED25519 256-bit
+Principal:       git@nada.mu namespaces="git"
+SHA256:          SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc
+MD5:             63:f8:11:92:74:54:08:07:01:d2:b6:71:a9:b1:34:cd
+
+[OpenPGP / GnuPG Public Key]
+File:            pgp/danya.asc (pgp/public.asc)
+Key ID:          946164D03B0B2320
+Type:            ed25519 (Curve 25519)
+UID:             DanyaNADAMU <danya@nada.mu>
+Fingerprint:     28FC 85D2 1EB0 BCDC 9F73  A41F 9461 64D0 3B0B 2320
+Subkeys:
+  - Sign:        ed25519 / [S] [expires: 2028-11-06]
+  - Encrypt:     cv25519 / [E] [expires: 2028-11-06]
+  - Auth:        ed25519 / [A] [expires: 2028-11-06]
+
+[S/MIME Public Certificate]
+File:            smime/danya.crt (smime/public_certificate.crt)
+Chain:           smime/fullchain.crt (smime/full_public_chain.crt)
+Subject:         CN = actalis@nada.mu
+Issuer:          C = IT, ST = Bergamo, L = Ponte San Pietro, O = Actalis S.p.A., CN = Actalis Client Authentication CA G3
+Validity:        2026-11-08 to 2027-11-08
+SHA256:          3D:89:19:61:54:9F:58:25:A0:E3:90:E5:B0:70:A8:9A:61:05:02:34:C4:06:C1:98:7B:EC:BE:29:0F:C0:75:71
