@@ -1,0 +1,16 @@
+Contact: mailto:security@nada.mu
+Contact: https://github.com/DanyaNADAMU
+Expires: 2027-11-01T00:00:00.000Z
+Preferred-Languages: en, ru
+Canonical: https://nada.mu/.well-known/security.txt
+Policy: https://github.com/DanyaNADAMU/Template/blob/main/SECURITY.md
+Encryption: https://nada.mu/.well-known/allowed_signers
+
+# ==============================================================================
+# AUTHORIZED GIT & RELEASE SIGNERS
+# ==============================================================================
+# Canonical allowed signers list for git signature verification:
+# https://nada.mu/.well-known/allowed_signers
+# https://github.com/DanyaNADAMU/Template/blob/main/.allowed_signers
+#
+# git@nada.mu namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEuAWhDyPEjrTrSIRfmPdS5fupVAu1mjpOVJsG1hT5z danya-git
