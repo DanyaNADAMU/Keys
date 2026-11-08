@@ -3,8 +3,9 @@
 This repository serves as the **Single Source of Truth (SSoT)** for all personal public cryptographic keys, trust declarations, and verification metadata for **Danya** (`nada.mu`).
 
 ## Invariant Boundaries
-* **Strictly Public**: Only public keys, public certificates, and declarations are tracked here.
-* **Zero Host/Server Keys**: Server administration keys (e.g. host credentials, infrastructure SSH keys) are strictly excluded.
+* **Strictly Public Identity**: Tracks exclusively public keys, public certificates, and declarations that constitute personal identity (e.g. `danya-git`, PGP, S/MIME).
+* **Zero Infrastructure / Server Keys**: Server administration keys, host credentials, and agent signing keys are strictly excluded. Public infrastructure keys and discovery records are published via `{*,@}.nada.mu/.well-known/`.
+* **Private Secrets SSoT**: All private credentials required for Ansible automation reside in Ansible Vault as the single source of truth (synchronized to VaultWarden).
 * **Mathematically Anchored**: All commits and tags are signed with `danya-git` (Ed25519) and anchored into the Bitcoin blockchain via OpenTimestamps.
 
 ## Repository Layout

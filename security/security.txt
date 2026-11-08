@@ -13,4 +13,4 @@ Encryption: https://nada.mu/.well-known/keys/danya.asc
 # https://nada.mu/.well-known/allowed_signers
 # https://github.com/DanyaNADAMU/Template/blob/main/.allowed_signers
 #
-# git@nada.mu namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEuAWhDyPEjrTrSIRfmPdS5fupVAu1mjpOVJsG1hT5z danya-git
+# git@nada.mu namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEuAWhDyPEjrTrSIRfmPdS5fupVAu1mjpOVJsG1hT5z git@nada.mu
