@@ -10,7 +10,8 @@
 
 ## Структура репозитория
 * [`ssh/`](file:///Projects/Keys/ssh) — открытые SSH-ключи для верификации коммитов и релизов Git.
-  * [`danya-git.pub`](file:///Projects/Keys/ssh/danya-git.pub) — открытый ключ OpenSSH Ed25519 в текстовом формате.
+  * [`danya-git.pub`](file:///Projects/Keys/ssh/danya-git.pub) — открытый ключ OpenSSH Ed25519 (основной).
+  * [`danya-git-2.pub`](file:///Projects/Keys/ssh/danya-git-2.pub) — открытый ключ OpenSSH Ed25519 (дополнительный).
   * [`allowed_signers`](file:///Projects/Keys/ssh/allowed_signers) — канонический файл OpenSSH `allowed_signers` для Git.
 * [`pgp/`](file:///Projects/Keys/pgp) — открытые ключи OpenPGP / GPG (ASCII-armored).
 * [`smime/`](file:///Projects/Keys/smime) — открытые сертификаты S/MIME (X.509 PEM / DER) для подписи и шифрования почты.
