@@ -61,12 +61,12 @@ fi
 printf "${GREEN}✓ [RELEASE GATE] Active branch is 'main'.${NC}\n"
 
 # Invariant 3: Annotated SemVer Release Tag on HEAD (or HEAD~1 for OTS proof commits)
-CURRENT_TAG="$(git describe --exact-match --tags HEAD 2>/dev/null || true)"
+CURRENT_TAG="$(git describe --exact-match --match 'v*' --tags HEAD 2>/dev/null || true)"
 if [ -z "$CURRENT_TAG" ]; then
     LAST_SUBJECT="$(git log -1 --pretty=%s HEAD 2>/dev/null || true)"
     case "$LAST_SUBJECT" in
         "Store OpenTimestamps proof for "*|"Upgrade OpenTimestamps proof for "*)
-            CURRENT_TAG="$(git describe --exact-match --tags HEAD~1 2>/dev/null || true)"
+            CURRENT_TAG="$(git describe --exact-match --match 'v*' --tags HEAD~1 2>/dev/null || true)"
             ;;
     esac
 fi
