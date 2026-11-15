@@ -3,19 +3,12 @@
 # Owner: Danya (DanyaNADAMU) <danya@nada.mu> / <git@nada.mu>
 # ==============================================================================
 
-[OpenSSH Git Commit Signing Key #1 (Primary - danya-git)]
+[OpenSSH Git Commit Signing Key (danya-git)]
 File:            ssh/danya-git.pub
 Type:            ED25519 256-bit
 Principal:       git@nada.mu namespaces="git"
 SHA256:          SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc
 MD5:             63:f8:11:92:74:54:08:07:01:d2:b6:71:a9:b1:34:cd
-
-[OpenSSH Git Commit Signing Key #2 (Secondary - danya-git-2)]
-File:            ssh/danya-git-2.pub
-Type:            ED25519 256-bit
-Principal:       git@nada.mu namespaces="git"
-SHA256:          SHA256:7uXWbjXIM2jA2ca9/rWM/LK7spy60iitZA7JgLxREsk
-MD5:             10:21:18:b7:70:89:f9:c4:85:19:81:68:9c:e8:dd:df
 
 [OpenPGP / GnuPG Public Key]
 File:            pgp/danya.asc (pgp/public.asc)

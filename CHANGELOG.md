@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- **Commit Signing Keys**: Retained strictly the primary OpenSSH signing key (`danya-git`, `SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc`) in `.allowed_signers` and `fingerprints.txt`. Removed secondary key `danya-git-2` and infrastructure entry `glacier-git`.
+
+### Added
+- **Project Rules (`AGENTS.md`)**: Added canonical repository agent rules and identity invariant boundary specifications.
+- **MIT License (`LICENSE`)**: Added standard permissive open-source license.
+
 ## [v1.0.0] - 2026-11-09
 
 ### Added

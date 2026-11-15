@@ -10,8 +10,7 @@ This repository serves as the **Single Source of Truth (SSoT)** for all personal
 
 ## Repository Layout
 * [`ssh/`](file:///Projects/Keys/ssh) — OpenSSH public keys used for Git commit and release verification.
-  * [`danya-git.pub`](file:///Projects/Keys/ssh/danya-git.pub) — Raw OpenSSH Ed25519 public key (Primary).
-  * [`danya-git-2.pub`](file:///Projects/Keys/ssh/danya-git-2.pub) — Raw OpenSSH Ed25519 public key (Secondary).
+  * [`danya-git.pub`](file:///Projects/Keys/ssh/danya-git.pub) — Raw OpenSSH Ed25519 public key.
   * [`allowed_signers`](file:///Projects/Keys/ssh/allowed_signers) — Canonical OpenSSH `allowed_signers` file for Git.
 * [`pgp/`](file:///Projects/Keys/pgp) — OpenPGP / GPG public keys (ASCII-armored).
 * [`smime/`](file:///Projects/Keys/smime) — S/MIME public certificates (X.509 PEM / DER) for email encryption and signatures.
