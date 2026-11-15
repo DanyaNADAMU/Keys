@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v1.1.0] - 2026-11-15
+
 ### Changed
 - **Commit Signing Keys**: Retained strictly the primary OpenSSH signing key (`danya-git`, `SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc`) in `.allowed_signers` and `fingerprints.txt`. Removed secondary key `danya-git-2` and infrastructure entry `glacier-git`.
 
