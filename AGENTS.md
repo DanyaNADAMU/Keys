@@ -20,6 +20,7 @@ Keys is the Single Source of Truth (SSoT) for all personal public cryptographic 
 - **`pgp/`**: OpenPGP ASCII-armored public key files (`danya.asc`, `public.asc`).
 - **`smime/`**: X.509 S/MIME public client certificates and issuer CA chain (`danya.crt`, `fullchain.crt`).
 - **`security/`**: Vulnerability disclosure policy conforming to RFC 9116 (`security.txt`).
+- **`web/`**: Rendered payload of `https://nada.mu/.well-known/` (`index.html`, `privacy.html`, `terms.html`). Plain static HTML, never templated: the `Infra` role `well_known` copies these files verbatim, so a Jinja placeholder would reach production as literal text. Domain and contact details are intentionally baked in — this repository *is* the `nada.mu` identity.
 - **`fingerprints.txt`**: Plaintext cryptographic attestation of SHA-256 and MD5 fingerprints for all identity assets.
 
 ## Conventions

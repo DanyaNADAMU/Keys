@@ -1,0 +1,77 @@
+name: Verify trust payload
+description: >-
+  Static verification of the served .well-known payload. Runs on every push
+  and is reused by the release pipeline, so a tag can only ship what a pull
+  request already proved.
+
+# This repository has no application code: its "tests" are the invariants
+# that make the published identity trustworthy. Each one fails on a mistake
+# that would otherwise be invisible until a client trusted the wrong bytes.
+runs:
+  using: composite
+  steps:
+    - name: Payload is rendered, not templated
+      # The Infra role copies web/ verbatim; a Jinja construct would ship to
+      # nada.mu as literal text and only surface as a broken page.
+      shell: bash
+      run: |
+        set -euo pipefail
+        if grep -rnE '\{\{|\{%' web/; then
+          echo "::error::Jinja placeholders or control blocks found in web/ — render the dashboard before committing"
+          exit 1
+        fi
+
+    - name: Advertised assets exist
+      # Every path the dashboard links under /.well-known/keys/ must map to a
+      # real file in this checkout, otherwise the trust hub ships dead links
+      # that look like a revoked key.
+      shell: bash
+      run: |
+        set -euo pipefail
+        missing=0
+        for ref in $(grep -rhoE '/\.well-known/keys/[A-Za-z0-9._-]+' web/ | sort -u); do
+          target="${ref#/.well-known/keys/}"
+          case "$target" in
+            danya-git.pub)                file="ssh/danya-git.pub" ;;
+            danya.asc|public.asc)         file="pgp/public.asc" ;;
+            danya.crt|public_certificate.crt) file="smime/public_certificate.crt" ;;
+            fullchain.crt|full_public_chain.crt) file="smime/full_public_chain.crt" ;;
+            *) echo "::error::Dashboard links ${ref}, which has no mapping in this check"; missing=1; continue ;;
+          esac
+          [ -f "$file" ] || { echo "::error::Dashboard links ${ref} but ${file} is missing"; missing=1; }
+        done
+        exit "$missing"
+
+    - name: Signing key matches its attestation
+      # fingerprints.txt is the human-readable claim; the key file is what
+      # clients verify against. If they disagree, the published fingerprint
+      # attests nothing.
+      shell: bash
+      run: |
+        set -euo pipefail
+        fp='zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc'
+        grep -q "SHA256:${fp}" fingerprints.txt \
+          || { echo "::error::fingerprints.txt does not attest the primary signing key"; exit 1; }
+        ssh-keygen -lf ssh/danya-git.pub | grep -q "$fp" \
+          || { echo "::error::ssh/danya-git.pub does not match the attested fingerprint"; exit 1; }
+        # allowed_signers is published at /.well-known/allowed_signers and is
+        # what git actually consults: it must be the same single principal.
+        [ "$(grep -c . .allowed_signers)" = "1" ] \
+          || { echo "::error::.allowed_signers must authorize exactly one principal"; exit 1; }
+        cmp -s .allowed_signers ssh/allowed_signers \
+          || { echo "::error::ssh/allowed_signers is no longer the canonical .allowed_signers"; exit 1; }
+        key="$(awk '{print $2}' ssh/danya-git.pub)"
+        grep -q "ssh-ed25519 ${key}" .allowed_signers \
+          || { echo "::error::.allowed_signers does not contain the published signing key"; exit 1; }
+
+    - name: Bilingual markers are paired
+      # Every user-visible string exists twice. An unpaired marker leaves one
+      # language permanently blank depending on the visitor's locale.
+      shell: bash
+      run: |
+        set -euo pipefail
+        for f in web/*.html; do
+          ru=$(grep -c 'data-lang="ru"' "$f" || true)
+          en=$(grep -c 'data-lang="en"' "$f" || true)
+          [ "$ru" = "$en" ] || { echo "::error::$f has ${ru} RU markers against ${en} EN markers"; exit 1; }
+        done

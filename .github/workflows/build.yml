@@ -1,0 +1,64 @@
+name: Build & Verify
+
+# Trunk pipeline for a NON-container repository: there is no image and no
+# staging roll, so verification itself is the build. Every push and pull
+# request proves the trust payload still holds together; the release
+# pipeline reuses the exact same checks before a tag can publish anything.
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+      - 'fix/**'
+    # Documentation-only pushes skip CI: prose cannot change a key, a
+    # fingerprint or a served byte.
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gitleaks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout full history
+        # A repository that exists to publish key material is exactly where
+        # a private key would do the most damage, and the timeline is
+        # append-only: a leak can be discovered, never silently removed.
+        # Full history on every push is the only honest scan.
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Secret scan (gitleaks)
+        env:
+          GITLEAKS_VERSION: '8.30.1'
+        run: |
+          set -euo pipefail
+          curl -sfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz gitleaks
+          ./gitleaks git --redact .
+
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Verify trust payload
+        uses: ./.github/actions/verify
