@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nada.mu / .well-known</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79b8ff;
+            --success: #3fb950;
+            --code-bg: #090d13;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 32px 16px;
+        }
+        .container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-width: 820px;
+            width: 100%;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--success);
+        }
+        h1 { font-size: 22px; color: #fff; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+        .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s ease;
+        }
+        .lang-btn:hover { color: #fff; }
+        .lang-btn.active { color: var(--accent); }
+        .lang-divider { color: var(--border-color); font-size: 11px; }
+
+        .section-title {
+            font-size: 16px;
+            color: #fff;
+            margin: 28px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .card {
+            background: #0d1117;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 16px 20px;
+            transition: border-color 0.15s ease;
+        }
+        .card:hover {
+            border-color: var(--accent);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .badge {
+            background: #21262d;
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            font-size: 12px;
+            display: inline-block;
+        }
+        .prop-row {
+            display: flex;
+            font-size: 13px;
+            line-height: 1.6;
+            margin: 4px 0;
+            flex-wrap: wrap;
+        }
+        .prop-label {
+            color: var(--text-muted);
+            width: 140px;
+            flex-shrink: 0;
+        }
+        .prop-val {
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #21262d;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #30363d;
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .code-box {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 16px;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+            font-size: 12px;
+            color: #c9d1d9;
+            overflow-x: auto;
+            margin: 12px 0;
+            position: relative;
+        }
+        .code-box pre { margin: 0; }
+
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <div class="header-title">
+                    <span class="status-dot"></span>
+                    <h1>/.well-known/</h1>
+                </div>
+                <p class="subtitle">
+                    <span data-lang="ru">Канонический реестр открытых криптографических ключей и метаданных nada.mu</span>
+                    <span data-lang="en">Canonical cryptographic public key directory and trust metadata for nada.mu</span>
+                </p>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn" data-btn-lang="ru" onclick="setLanguage('ru')">RU</button>
+                <span class="lang-divider">|</span>
+                <button class="lang-btn" data-btn-lang="en" onclick="setLanguage('en')">EN</button>
+            </div>
+        </div>
+
+        <!-- Section: Public Keys & Trust Declarations -->
+        <h2 class="section-title">
+            <span data-lang="ru">Криптографические ключи и доверенные сертификаты</span>
+            <span data-lang="en">Cryptographic Public Keys & Trust Certificates</span>
+        </h2>
+
+        <div class="card-grid">
+            <!-- SSH Commit Signing Key (primary, sole authorized signer) -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">OpenSSH Git Signing Key</div>
+                    <span class="badge">ED25519</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label"><span data-lang="ru">Принципал</span><span data-lang="en">Principal</span>:</span>
+                    <span class="prop-val">git@nada.mu (namespaces="git")</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">SHA-256:</span>
+                    <span class="prop-val">SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc</span>
+                </div>
+                <div class="btn-group">
+                    <a class="btn" href="/.well-known/keys/danya-git.pub" download>danya-git.pub</a>
+                    <a class="btn" href="/.well-known/allowed_signers" download>allowed_signers</a>
+                    <button class="btn" onclick="copyText('git@nada.mu namespaces=\x22git\x22 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEuAWhDyPEjrTrSIRfmPdS5fupVAu1mjpOVJsG1hT5z git@nada.mu')">
+                        <span data-lang="ru">Копировать ключ</span>
+                        <span data-lang="en">Copy Key</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- OpenPGP / GnuPG Public Key -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">OpenPGP / GnuPG Public Key</div>
+                    <span class="badge">ed25519 / cv25519</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">UID:</span>
+                    <span class="prop-val">DanyaNADAMU &lt;danya@nada.mu&gt;</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Key ID:</span>
+                    <span class="prop-val">946164D03B0B2320</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Fingerprint:</span>
+                    <span class="prop-val">28FC 85D2 1EB0 BCDC 9F73  A41F 9461 64D0 3B0B 2320</span>
+                </div>
+                <div class="btn-group">
+                    <a class="btn" href="/.well-known/keys/danya.asc" download>danya.asc (GPG)</a>
+                    <button class="btn" onclick="copyText('28FC85D21EB0BCDC9F73A41F946164D03B0B2320')">
+                        <span data-lang="ru">Копировать отпечаток</span>
+                        <span data-lang="en">Copy Fingerprint</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- S/MIME Certificate -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">S/MIME Client Certificate</div>
+                    <span class="badge">X.509</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Subject:</span>
+                    <span class="prop-val">CN = actalis@nada.mu</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Issuer:</span>
+                    <span class="prop-val">Actalis Client Authentication CA G3</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">SHA-256:</span>
+                    <span class="prop-val">3D:89:19:61:54:9F:58:25:A0:E3:90:E5:B0:70:A8:9A:61:05:02:34:C4:06:C1:98:7B:EC:BE:29:0F:C0:75:71</span>
+                </div>
+                <div class="btn-group">
+                    <a class="btn" href="/.well-known/keys/danya.crt" download>danya.crt</a>
+                    <a class="btn" href="/.well-known/keys/fullchain.crt" download>fullchain.crt (CA Chain)</a>
+                </div>
+            </div>
+
+            <!-- Domain TLS Certificate -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Domain TLS / HTTPS Certificate</div>
+                    <span class="badge">Let's Encrypt</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Domain:</span>
+                    <span class="prop-val">nada.mu (*.nada.mu)</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label"><span data-lang="ru">Тип</span><span data-lang="en">Type</span>:</span>
+                    <span class="prop-val">ECDSA / RSA Wildcard</span>
+                </div>
+                <div class="btn-group">
+                    <a class="btn" href="/.well-known/certs/nada.mu.crt" download>nada.mu.crt</a>
+                    <a class="btn" href="/.well-known/certs/fullchain.pem" download>fullchain.pem</a>
+                </div>
+            </div>
+
+            <!-- Security Policy -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Security Vulnerability Policy</div>
+                    <span class="badge">RFC 9116</span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Contact:</span>
+                    <span class="prop-val"><a href="mailto:security@nada.mu" style="color: var(--accent);">security@nada.mu</a></span>
+                </div>
+                <div class="prop-row">
+                    <span class="prop-label">Policy:</span>
+                    <span class="prop-val"><a href="https://github.com/DanyaNADAMU/Template/blob/main/SECURITY.md" target="_blank" rel="noopener" style="color: var(--accent);">https://github.com/DanyaNADAMU/Template/blob/main/SECURITY.md</a></span>
+                </div>
+                <div class="btn-group">
+                    <a class="btn" href="/.well-known/security.txt">security.txt</a>
+                    <a class="btn" href="/.well-known/fingerprints.txt">fingerprints.txt</a>
+                    <a class="btn" href="/.well-known/privacy.html"><span data-lang="ru">Политика конфиденциальности</span><span data-lang="en">Privacy Policy</span></a>
+                    <a class="btn" href="/.well-known/terms.html"><span data-lang="ru">Условия использования</span><span data-lang="en">Terms of Service</span></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Verification Instructions -->
+        <h2 class="section-title">
+            <span data-lang="ru">Руководство по локальной верификации</span>
+            <span data-lang="en">Verification Guide</span>
+        </h2>
+
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+            <span data-lang="ru">1. Настройка проверки цифровых подписей коммитов Git:</span>
+            <span data-lang="en">1. Verify Git commit signatures locally with allowed_signers:</span>
+        </p>
+        <div class="code-box">
+            <pre><code>git config gpg.ssh.allowedSignersFile .allowed_signers
+git log --show-signature</code></pre>
+        </div>
+
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 16px; margin-bottom: 8px;">
+            <span data-lang="ru">2. Верификация меток времени OpenTimestamps в блокчейне Bitcoin:</span>
+            <span data-lang="en">2. Verify OpenTimestamps Bitcoin blockchain proofs:</span>
+        </p>
+        <div class="code-box">
+            <pre><code>git ots verify</code></pre>
+        </div>
+
+        <div class="footer">
+            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                <a href="https://nada.mu">← nada.mu</a>
+                <span>•</span>
+                <a href="/.well-known/privacy.html"><span data-lang="ru">Конфиденциальность</span><span data-lang="en">Privacy</span></a>
+                <span>•</span>
+                <a href="/.well-known/terms.html"><span data-lang="ru">Условия</span><span data-lang="en">Terms</span></a>
+            </div>
+            <div>
+                <a href="https://github.com/DanyaNADAMU" target="_blank" rel="noopener">GitHub: @DanyaNADAMU</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setLanguage(lang) {
+            localStorage.setItem('preferred_lang', lang);
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-lang]').forEach(function(el) {
+                el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+            });
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.getAttribute('data-btn-lang') === lang);
+            });
+        }
+
+        function copyText(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('Copied to clipboard!');
+                });
+            } else {
+                var input = document.createElement('textarea');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                alert('Copied to clipboard!');
+            }
+        }
+
+        (function() {
+            var saved = localStorage.getItem('preferred_lang');
+            if (!saved) {
+                var navLang = (navigator.language || navigator.userLanguage || 'ru').toLowerCase();
+                saved = (navLang.startsWith('ru') || navLang.startsWith('be') || navLang.startsWith('uk')) ? 'ru' : 'en';
+            }
+            setLanguage(saved);
+        })();
+    </script>
+</body>
+</html>

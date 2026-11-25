@@ -9,13 +9,14 @@
 * **Математическая неизменяемость**: каждый коммит подписан SSH-ключом `danya-git` (Ed25519) и зафиксирован в блокчейне Bitcoin через OpenTimestamps.
 
 ## Структура репозитория
-* [`ssh/`](file:///Projects/Keys/ssh) — открытые SSH-ключи для верификации коммитов и релизов Git.
-  * [`danya-git.pub`](file:///Projects/Keys/ssh/danya-git.pub) — открытый ключ OpenSSH Ed25519.
-  * [`allowed_signers`](file:///Projects/Keys/ssh/allowed_signers) — канонический файл OpenSSH `allowed_signers` для Git.
-* [`pgp/`](file:///Projects/Keys/pgp) — открытые ключи OpenPGP / GPG (ASCII-armored).
-* [`smime/`](file:///Projects/Keys/smime) — открытые сертификаты S/MIME (X.509 PEM / DER) для подписи и шифрования почты.
-* [`security/`](file:///Projects/Keys/security) — политика сообщений об уязвимостях ([RFC 9116 `security.txt`](file:///Projects/Keys/security/security.txt)).
-* [`docs/`](file:///Projects/Keys/docs) — документация и руководства по проверке на русском и английском языках.
+* [`ssh/`](ssh) — открытые SSH-ключи для верификации коммитов и релизов Git.
+  * [`danya-git.pub`](ssh/danya-git.pub) — открытый ключ OpenSSH Ed25519.
+  * [`allowed_signers`](ssh/allowed_signers) — канонический файл OpenSSH `allowed_signers` для Git.
+* [`pgp/`](pgp) — открытые ключи OpenPGP / GPG (ASCII-armored).
+* [`smime/`](smime) — открытые сертификаты S/MIME (X.509 PEM / DER) для подписи и шифрования почты.
+* [`security/`](security) — политика сообщений об уязвимостях ([RFC 9116 `security.txt`](security/security.txt)).
+* [`web/`](web) — отрендеренное содержимое [`https://nada.mu/.well-known/`](https://nada.mu/.well-known/): доверительный дашборд, политика конфиденциальности и условия использования. Хранится как обычный статический HTML без шаблонизации: роль `well_known` репозитория `Infra` копирует эти файлы в веб-корень дословно, поэтому плейсхолдер ушёл бы в продакшн как есть.
+* [`docs/`](docs) — документация и руководства по проверке на русском и английском языках.
 
 ## Локальная проверка подписей Git
 

@@ -1,0 +1,112 @@
+name: Release Keys
+
+# Production pipeline for a NON-container repository: signed semver tags
+# gate through the shared release-precheck, then the release is attested
+# as a source archive instead of an image — `git archive` -> SHA256SUMS
+# -> OpenTimestamps -> GitHub Release with the checksums and proofs
+# attached. Tag push is the only trigger: a release never rides on a
+# plain commit to main.
+#
+# There is deliberately no deploy job. Nothing here is deployed by CI:
+# the published .well-known payload is delivered to nada.mu by the Infra
+# Ansible role `well_known`, which reads this checkout on the controller.
+# CI's job is to make the exact bytes that get served verifiable.
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  precheck:
+    # Shared gate: strict SemVer, CHANGELOG section, SSH tag-signature
+    # verification against .allowed_signers, ancestry from main.
+    uses: Danyanadamu/Workflows/.github/workflows/release-precheck.yml@v1
+    with:
+      base_branch: main
+
+  verify:
+    needs: precheck
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Web payload is rendered, not templated
+        # web/ is consumed by the Infra role with `copy`, not `template`.
+        # A leftover Jinja placeholder would ship to nada.mu verbatim and
+        # only surface as a broken page, so it fails the release here.
+        run: |
+          set -euo pipefail
+          if grep -rn '{{' web/; then
+            echo "::error::Jinja placeholders found in web/ — render the dashboard before committing"
+            exit 1
+          fi
+
+      - name: Attested assets match fingerprints.txt
+        # The served keys are the ones attestation claims they are: every
+        # fingerprinted public key must exist and its SHA-256 must match.
+        run: |
+          set -euo pipefail
+          for f in ssh/danya-git.pub pgp/public.asc smime/public_certificate.crt smime/full_public_chain.crt; do
+            [ -f "$f" ] || { echo "::error::Missing advertised asset: $f"; exit 1; }
+          done
+          grep -q 'SHA256:zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc' fingerprints.txt \
+            || { echo "::error::fingerprints.txt lost the primary signing key attestation"; exit 1; }
+          ssh-keygen -lf ssh/danya-git.pub | grep -q 'zUV6/z1GQKLalAt6WIBOIwgS5TdaQovUVkR+7ItwbZc' \
+            || { echo "::error::ssh/danya-git.pub does not match the attested fingerprint"; exit 1; }
+
+  attest:
+    needs: verify
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout full history
+        # The archive is cut from the tag itself; full history keeps the
+        # signature verification and ancestry checks reproducible.
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0
+
+      - name: Build source archive and checksums
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          # gzip -n keeps the archive bit-identical for identical input:
+          # the checksum is an attestation, not a timestamp.
+          git archive --format=tar --prefix="Keys-${TAG}/" "$TAG" | gzip -n -9 > "Keys-${TAG}.tar.gz"
+          sha256sum "Keys-${TAG}.tar.gz" > SHA256SUMS
+
+      - name: Anchor archive and checksums with OpenTimestamps
+        run: |
+          set -euo pipefail
+          pipx install opentimestamps-client
+          ots stamp Keys-*.tar.gz
+          ots stamp SHA256SUMS
+
+      - name: Publish GitHub Release with evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          awk -v tag="## [$TAG]" '
+            substr($0, 1, length(tag)) == tag { in_section = 1; next }
+            in_section && /^## \[/ { exit }
+            in_section { print }
+          ' CHANGELOG.md > release-notes.md
+          [ -s release-notes.md ] || { echo "::error::CHANGELOG section for $TAG is empty"; exit 1; }
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --notes-file release-notes.md
+            gh release upload "$TAG" Keys-*.tar.gz SHA256SUMS Keys-*.tar.gz.ots SHA256SUMS.ots --clobber
+          else
+            gh release create "$TAG" \
+              --title "$TAG" \
+              --notes-file release-notes.md \
+              --verify-tag \
+              "Keys-${TAG}.tar.gz" SHA256SUMS "Keys-${TAG}.tar.gz.ots" SHA256SUMS.ots
+          fi

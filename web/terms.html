@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nada.mu / Terms of Service</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79b8ff;
+            --success: #3fb950;
+            --code-bg: #090d13;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 32px 16px;
+        }
+        .container {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            max-width: 820px;
+            width: 100%;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background-color: var(--success);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 8px var(--success);
+        }
+        h1 { font-size: 22px; color: #fff; font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+        .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+
+        .lang-switch {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #21262d;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 2px 6px;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: color 0.15s ease;
+        }
+        .lang-btn:hover { color: #fff; }
+        .lang-btn.active { color: var(--accent); }
+        .lang-divider { color: var(--border-color); font-size: 11px; }
+
+        .content-section {
+            margin: 24px 0;
+            line-height: 1.65;
+            font-size: 14px;
+        }
+        .content-section h2 {
+            font-size: 17px;
+            color: #fff;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .content-section p {
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+        .content-section ul {
+            margin: 8px 0 16px 20px;
+        }
+        .content-section li {
+            margin: 6px 0;
+            color: var(--text-main);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .nav-btn {
+            background: #21262d;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-btn:hover {
+            background: #30363d;
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .footer {
+            margin-top: 32px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <div class="header-title">
+                    <span class="status-dot"></span>
+                    <h1>Terms of Service</h1>
+                </div>
+                <p class="subtitle">
+                    <span data-lang="ru">Условия предоставления сервисов nada.mu</span>
+                    <span data-lang="en">Terms of Service for nada.mu</span>
+                </p>
+            </div>
+            <div class="lang-switch">
+                <button class="lang-btn" data-btn-lang="ru" onclick="setLanguage('ru')">RU</button>
+                <span class="lang-divider">|</span>
+                <button class="lang-btn" data-btn-lang="en" onclick="setLanguage('en')">EN</button>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a class="nav-btn" href="/.well-known/">← <span data-lang="ru">Хаб метаданных</span><span data-lang="en">Trust Hub</span></a>
+            <a class="nav-btn" href="/.well-known/privacy.html"><span data-lang="ru">Политика конфиденциальности</span><span data-lang="en">Privacy Policy</span></a>
+            <a class="nav-btn" href="/.well-known/security.txt">security.txt</a>
+        </div>
+
+        <!-- Section 1 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">1. Принятие условий</span>
+                <span data-lang="en">1. Acceptance of Terms</span>
+            </h2>
+            <p>
+                <span data-lang="ru">Используя сервисы, веб-ресурсы, API или приложения, ассоциированные с доменом <strong>nada.mu</strong> (включая <strong>NadaMu Cloud</strong> и сервисы синхронизации данных), вы соглашаетесь соблюдать настоящие Условия использования. Если вы не согласны с какими-либо положениями настоящих условий, вам следует воздержаться от использования данных сервисов.</span>
+                <span data-lang="en">By accessing or utilizing services, web portals, APIs, or software applications associated with <strong>nada.mu</strong> (including <strong>NadaMu Cloud</strong> and storage synchronization agents), you acknowledge that you have read, understood, and agreed to be bound by these Terms of Service. If you disagree with any provision, you must discontinue use immediately.</span>
+            </p>
+        </div>
+
+        <!-- Section 2 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">2. Описание предоставляемых услуг</span>
+                <span data-lang="en">2. Service Description</span>
+            </h2>
+            <p>
+                <span data-lang="ru">Экосистема nada.mu предоставляет персональную приватную облачную инфраструктуру, утилиты синхронизации данных, автоматизированное создание защищенных резервных копий и публичные криптографические декларации доверия. Сервисы могут взаимодействовать с внешними провайдерами хранилищ (например, Google Drive API) в строгом соответствии с авторизованными пользователем разрешениями.</span>
+                <span data-lang="en">The nada.mu ecosystem provides personal private cloud infrastructure, automated backup synchronization agents, client-side encrypted storage adapters, and public cryptographic trust registries. Services may interface with external cloud providers (such as the Google Drive API) under explicit, user-delegated authorization.</span>
+            </p>
+        </div>
+
+        <!-- Section 3 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">3. Правила допустимого использования</span>
+                <span data-lang="en">3. Acceptable Use Policy</span>
+            </h2>
+            <p>
+                <span data-lang="ru">Пользователи сервиса обязуются соблюдать следующие правила:</span>
+                <span data-lang="en">Users are strictly required to adhere to the following behavioral standards:</span>
+            </p>
+            <ul>
+                <li><span data-lang="ru">Не использовать сервисы для противоправных действий или нарушения законодательства.</span><span data-lang="en">Do not engage in unlawful conduct or deploy the platform in violation of applicable laws.</span></li>
+                <li><span data-lang="ru">Не предпринимать попыток дестабилизации инфраструктуры, проведения атак типа «отказ в обслуживании» (DoS/DDoS) или несанкционированного сканирования уязвимостей без координации по регламенту security.txt.</span><span data-lang="en">Do not attempt denial-of-service (DoS/DDoS) disruption, unauthorized intrusion, or uncoordinated vulnerability scanning outside designated security policy guidelines.</span></li>
+                <li><span data-lang="ru">Обеспечивать сохранность собственных криптографических ключей, секретов и OAuth-токенов.</span><span data-lang="en">Maintain rigorous custody over personal cryptographic keys, encryption passphrases, and OAuth credentials.</span></li>
+            </ul>
+        </div>
+
+        <!-- Section 4 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">4. Сторонние интеграции (Google Drive, Cloudflare)</span>
+                <span data-lang="en">4. Third-Party Integrations</span>
+            </h2>
+            <p>
+                <span data-lang="ru">Сервисы могут интегрироваться со сторонними API и платформами (включая Google Cloud и Cloudflare). Функционирование этих интеграций зависит от доступности и политик соответствующих третьих сторон. Взаимодействие с Google API регламентируется <a href="/.well-known/privacy.html" style="color: var(--accent);">Политикой конфиденциальности</a> и правилами Google API Services User Data Policy.</span>
+                <span data-lang="en">Platform components interact with third-party upstream APIs (including Google Cloud and Cloudflare). Continued interoperability is subject to upstream provider availability and terms. Interaction with Google APIs is explicitly governed by our <a href="/.well-known/privacy.html" style="color: var(--accent);">Privacy Policy</a> and the Google API Services User Data Policy.</span>
+            </p>
+        </div>
+
+        <!-- Section 5 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">5. Отказ от гарантий</span>
+                <span data-lang="en">5. Disclaimer of Warranties</span>
+            </h2>
+            <p>
+                <span data-lang="ru">Сервисы предоставляются на условиях «КАК ЕСТЬ» («AS IS») и «ПО МЕРЕ ДОСТУПНОСТИ» («AS AVAILABLE»), без каких-либо явных или подразумеваемых гарантий, включая гарантии коммерческой пригодности, бесперебойной работы или пригодности для конкретных целей.</span>
+                <span data-lang="en">All services, code artifacts, and APIs are provided on an "AS IS" and "AS AVAILABLE" basis without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, uptime availability, or fitness for a particular purpose.</span>
+            </p>
+        </div>
+
+        <!-- Section 6 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">6. Ограничение ответственности</span>
+                <span data-lang="en">6. Limitation of Liability</span>
+            </h2>
+            <p>
+                <span data-lang="ru">В максимальной степени, допустимой применимым законодательством, оператор сервиса не несет ответственности за любые прямые, косвенные, случайные или штрафные убытки, включая потерю данных, сбои синхронизации или перебои в работе сторонних облачных хранилищ.</span>
+                <span data-lang="en">To the maximum extent permitted by applicable law, the operator shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages, including data loss, hardware interruption, or third-party cloud service outages.</span>
+            </p>
+        </div>
+
+        <!-- Section 7 -->
+        <div class="content-section">
+            <h2>
+                <span data-lang="ru">7. Контактная информация</span>
+                <span data-lang="en">7. Contact & Security Inquiries</span>
+            </h2>
+            <p>
+                <span data-lang="ru">По вопросам условий обслуживания и правовым запросам:</span>
+                <span data-lang="en">For legal inquiries, terms clarification, or responsible disclosure:</span>
+            </p>
+            <p>
+                Email: <a href="mailto:security@nada.mu" style="color: var(--accent);">security@nada.mu</a><br>
+                Security Policy: <a href="/.well-known/security.txt" style="color: var(--accent);">https://nada.mu/.well-known/security.txt</a>
+            </p>
+        </div>
+
+        <div class="footer">
+            <div>
+                <a href="https://nada.mu">← nada.mu</a>
+            </div>
+            <div>
+                <span>Last updated: November 2026</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function setLanguage(lang) {
+            localStorage.setItem('preferred_lang', lang);
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-lang]').forEach(function(el) {
+                el.style.display = (el.getAttribute('data-lang') === lang) ? '' : 'none';
+            });
+            document.querySelectorAll('.lang-btn').forEach(function(btn) {
+                btn.classList.toggle('active', btn.getAttribute('data-btn-lang') === lang);
+            });
+        }
+
+        (function() {
+            var saved = localStorage.getItem('preferred_lang');
+            if (!saved) {
+                var navLang = (navigator.language || navigator.userLanguage || 'ru').toLowerCase();
+                saved = (navLang.startsWith('ru') || navLang.startsWith('be') || navLang.startsWith('uk')) ? 'ru' : 'en';
+            }
+            setLanguage(saved);
+        })();
+    </script>
+</body>
+</html>
