@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **`.well-known` Web Payload (`web/`)**: The canonical trust dashboard, privacy policy, and terms of service previously rendered from Jinja templates inside the `Infra` role `well_known` now live here as plain static HTML. Keys becomes the single source of truth for the whole `https://nada.mu/.well-known/` surface, so the served page is versioned, signed, and OpenTimestamps-anchored like every other trust artifact.
 - **Release Attestation (`release.yml`)**: Signed semver tags now attest a source archive — `git archive` → `SHA256SUMS` → OpenTimestamps → GitHub Release with checksums and proofs attached. The pipeline carries no deploy job: delivery to the host stays with Ansible.
+- **Trunk Verification (`build.yml`, `.github/actions/verify`)**: every push and pull request runs gitleaks over the full history (the one place a private key would do the most damage) and executes the payload invariants — no Jinja leftovers in `web/`, every dashboard key link maps to a real file, the published key matches its attested fingerprint and the single principal in `.allowed_signers`, bilingual markers are paired. The release pipeline reuses the same composite action, so a tag cannot ship a payload a pull request never proved.
 - **Protection Audit (`protection-audit.yml`, `.github/protection-expected.json`)**: Weekly drift check of `main` branch protection and the release-tag ruleset against the committed contract; the trust anchor must not be silently rewritten.
 
 ### Fixed
