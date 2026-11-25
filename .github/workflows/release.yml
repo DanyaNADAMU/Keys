@@ -34,12 +34,12 @@ jobs:
 
       - name: Web payload is rendered, not templated
         # web/ is consumed by the Infra role with `copy`, not `template`.
-        # A leftover Jinja placeholder would ship to nada.mu verbatim and
+        # A leftover Jinja construct would ship to nada.mu verbatim and
         # only surface as a broken page, so it fails the release here.
         run: |
           set -euo pipefail
-          if grep -rn '{{' web/; then
-            echo "::error::Jinja placeholders found in web/ — render the dashboard before committing"
+          if grep -rnE '\{\{|\{%' web/; then
+            echo "::error::Jinja placeholders or control blocks found in web/ — render the dashboard before committing"
             exit 1
           fi
 
@@ -81,10 +81,12 @@ jobs:
           sha256sum "Keys-${TAG}.tar.gz" > SHA256SUMS
 
       - name: Anchor archive and checksums with OpenTimestamps
+        env:
+          TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
           pipx install opentimestamps-client
-          ots stamp Keys-*.tar.gz
+          ots stamp "Keys-${TAG}.tar.gz"
           ots stamp SHA256SUMS
 
       - name: Publish GitHub Release with evidence
@@ -93,6 +95,7 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           set -euo pipefail
+          archive="Keys-${TAG}.tar.gz"
           awk -v tag="## [$TAG]" '
             substr($0, 1, length(tag)) == tag { in_section = 1; next }
             in_section && /^## \[/ { exit }
@@ -102,11 +105,11 @@ jobs:
 
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release edit "$TAG" --notes-file release-notes.md
-            gh release upload "$TAG" Keys-*.tar.gz SHA256SUMS Keys-*.tar.gz.ots SHA256SUMS.ots --clobber
+            gh release upload "$TAG" "$archive" SHA256SUMS "${archive}.ots" SHA256SUMS.ots --clobber
           else
             gh release create "$TAG" \
               --title "$TAG" \
               --notes-file release-notes.md \
               --verify-tag \
-              "Keys-${TAG}.tar.gz" SHA256SUMS "Keys-${TAG}.tar.gz.ots" SHA256SUMS.ots
+              "$archive" SHA256SUMS "${archive}.ots" SHA256SUMS.ots
           fi
